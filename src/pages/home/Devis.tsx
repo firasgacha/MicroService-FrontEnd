@@ -75,22 +75,12 @@ export default function Dossier() {
     const [showAddDosctor, setshowAddDosctor] = useState(false);
     const [showEditDosctor, setshowEditDosctor] = useState(false);
 
-    const [DoctorId, setDoctorId] = useState();
-    const [fisrtName, setFisrtName] = useState(String);
-    const [lastName, setLastName] = useState(String);
-    const [gender, setGender] = useState(String);
-    const [birthday, setBirthday] = useState(Date);
-    const [cin, setCIN] = useState(0);
-    const [adress, setAdress] = useState(String);
-    const [city, setCity] = useState(String);
-    const [country, setCountry] = useState(String);
-    const [postalCode, setPostalCode] = useState(0);
-    const [email, setEmail] = useState(String);
-    const [specialty, setSpecialty] = useState(String);
-    const [phone, setPhone] = useState(Number);
-    const [headofDepartment, setHeadofDepartment] = useState(false);
-    const [pwd, setPwd] = useState(String);
-    const [countryCode, setCountryCode] = useState(String);
+    const [devisId, setdevisId] = useState();
+    const [dateDevis, setdateDevis] = useState(Date);
+    const [descriptionDevis, setdescriptionDevis] = useState(String);
+    const [coutDevis, setcoutDevis] = useState(String);
+    const [clientDevis, setclientDevis] = useState(String);
+   
 
     const [imageselected, setImageselected] = useState(String);
     const [PublicId, setPublicId] = useState("Empty");
@@ -98,19 +88,6 @@ export default function Dossier() {
     const [departmentId, setdepartmentId] = useState(Number);
 
 
-    const PostImage = () => {
-        const formData = new FormData();
-        formData.append("file", imageselected);
-        formData.append("upload_preset", "qysdlxzm");
-        axios.post(
-            "https://api.cloudinary.com/v1_1/du8mkgw6r/image/upload",
-            formData,
-        ).then((response) => {
-            const result = response.data;
-            // setImage(result.secure_url);
-            setPublicId(result.public_id);
-        });
-    }
 
     const fetchDoctorData = async () => {
         await axios.get('localhost:8079/con/constat')
@@ -122,23 +99,9 @@ export default function Dossier() {
             })
 
     }
-    const fetchDepartemnetsData = async () => {
-        await axios.get('Department')
-            .then((res) => {
-                setDepartmentsListData(res.data);
-            }).catch((err) => {
-                console.log(err);
-            })
-    }
+   
 
-    const getDepartementById = async (id: Number) => {
-        await axios.get(`Department/${id}`)
-            .then((res) => {
-                setDepartmentName(res.data.departmentName);
-            }).catch((err) => {
-                console.log(err);
-            })
-    }
+   
 
 
     const columns = useMemo(() => COLUMNS, []);
@@ -200,7 +163,7 @@ export default function Dossier() {
 
     const deleteDoctor = async () => {
         selectedFlatRows.map(async (row) => {
-            await axios.delete(`Doctor/${row.original.id}`)
+            await axios.delete(`localhost:8079/con/constat/${row.original.devisId}`)
                 .then((res) => {
                     fetchDoctorData();
                 }).catch((err) => {
@@ -212,119 +175,54 @@ export default function Dossier() {
     const addDoctor = async () => {
         await axios.post('Doctor',
             {
-                "fisrtName": fisrtName,
-                "lastName": lastName,
-                "birthday": birthday,
-                "gender": gender,
-                "password": randomPassword(),
-                "cin": cin,
-                "address": adress,
-                "city": city,
-                "country": country,
-                "postalCode": postalCode,
-                "email": email,
-                "specialty": specialty,
-                "phone": countryCode.concat(String(phone)),
-                "headofDepartment": headofDepartment,
-                "imageUrl": PublicId,
-                "departmentFk": departmentId
+                "dateDevis": dateDevis,
+                "descriptionDevis": descriptionDevis,
+                "coutDevis": coutDevis,
+                "clientDevis": clientDevis,
             })
             .then((res) => {
-                alert("Doctor added");
+                alert("Devis added");
                 fetchDoctorData();
-                setPublicId("Empty");
-                setImageselected("");
             }).catch((err) => {
                 console.log(err);
             }
             )
-        setCountryCode("");
     }
 
     const editDoctor = async () => {
-        await axios.put(`Doctor/${DoctorId}`,
+        await axios.put(`localhost:8079/con/constat/${devisId}`,
             {
-                "id": DoctorId,
-                "fisrtName": fisrtName,
-                "lastName": lastName,
-                "birthday": birthday,
-                "gender": gender,
-                "cin": cin,
-                "address": adress,
-                "city": city,
-                "country": country,
-                "postalCode": postalCode,
-                "email": email,
-                "specialty": specialty,
-                "phone": countryCode.concat(String(phone)),
-                "headofDepartment": headofDepartment,
-                "imageUrl": PublicId,
-                "departmentFk": departmentId,
-                "password": pwd
+                "devisId": devisId,
+                "dateDevis": dateDevis,
+                "descriptionDevis": descriptionDevis,
+                "coutDevis": coutDevis,
+                "clientDevis": clientDevis,
             })
             .then((res) => {
-                alert("Doctor updated");
+                alert("Devis updated");
                 fetchDoctorData();
             }).catch((err) => {
                 console.log(err.message);
             }
             )
-        setCountryCode("");
     }
 
     const EditFunction = () => {
         if (selectedFlatRows.length === 1) {
             selectedFlatRows.map(async (row) => {
-                setDoctorId(row.original.id);
-                setFisrtName(row.original.fisrtName);
-                setLastName(row.original.lastName);
-                setBirthday(row.original.birthday);
-                setCIN(row.original.cin);
-                setAdress(row.original.address);
-                setCity(row.original.city);
-                setCountry(row.original.country);
-                setPostalCode(row.original.postalCode);
-                setEmail(row.original.email);
-                setSpecialty(row.original.specialty);
-                setPhone(row.original.phone);
-                setHeadofDepartment(row.original.headofDepartment);
-                setdepartmentId(row.original.departmentFk);
-                setPublicId(row.original.imageUrl);
-                setPwd(row.original.password);
+                setdevisId(row.original.devisId);
+                setdateDevis(row.original.dateDevis);
+                setdescriptionDevis(row.original.descriptionDevis);
+                setcoutDevis(row.original.coutDevis);
+                setclientDevis(row.original.clientDevis);
             })
             setshowEditDosctor(!showEditDosctor);
         }
     }
 
 
-    // const getGeoInfo = async () => {
-    //     await fetch('https://ipapi.co/ip/')
-    //         .then(function (response) {
-    //             response.text().then(txt => {
-    //                 console.log(txt);
-    //                 fetch(`https://ipapi.co/${txt}/json/`)
-    //                     .then(function (response) {
-    //                         response.json().then(jsonData => {
-    //                             console.log(jsonData);
-    //                             setCountry(jsonData.country_name);
-    //                             setCountryCode(jsonData.country_calling_code);
-    //                         });
-    //                     })
-    //                     .catch(function (error) {
-    //                         console.log(error)
-    //                     });
-    //             });
-    //         })
-    //         .catch(function (error) {
-    //             console.log(error)
-    //         });
-    // };
-
-
     useEffect(() => {
-        console.log('hhhhhhhhh', randomPassword())
         fetchDoctorData();
-        fetchDepartemnetsData();
     }, [])
 
 
@@ -337,7 +235,7 @@ export default function Dossier() {
                         <div className="flex items-center justify-center h-full w-full">
                             <div className="bg-white rounded-md shadow fixed overflow-y-auto sm:h-auto w-10/12 md:w-8/12 lg:w-1/2 2xl:w-2/5">
                                 <div className="bg-gray-100 rounded-tl-md rounded-tr-md px-4 md:px-8 md:py-4 py-7 flex items-center justify-between">
-                                    <p className="text-base font-semibold">Create New Doctor</p>
+                                    <p className="text-base font-semibold">Create New Devis</p>
                                     <button className="focus:outline-none">
                                         <svg onClick={() => {
                                             setshowAddDosctor(!showAddDosctor);
@@ -351,92 +249,13 @@ export default function Dossier() {
                                 </div>
                                 <div className="px-4 md:px-10 pt-6 md:pt-12 md:pb-4 pb-7">
                                     <form>
-                                        <div className="flex-row items-center justify-center mb-4">
-                                            <div className="flex justify-center items-center">
-                                                {PublicId == "Empty" ?
-                                                    <img src="src/assets/upload.svg" alt="upload" className="h-[100px] w-[100px]" />
-                                                    :
-                                                    <div className="max-h-auto max-w-[120px] mb-2"><ImageBalise image={PublicId} /></div>
-                                                }
-                                            </div>
-                                            <div className="flex justify-center items-center">
-                                                <input
-                                                    type="file"
-                                                    placeholder="Upload Your Screen Shot"
-                                                    onChange={(event) => {
-                                                        setImageselected(event.target.files[0])
-                                                    }} />
-                                                <button
-                                                    className="px-6 py-3 bg-blue-500 hover:bg-opacity-80 shadow rounded text-sm text-white"
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        PostImage();
-                                                    }}>Upload</button>
-                                                <button
-                                                    className="px-6 py-3 ml-2 bg-red-500 hover:bg-opacity-80 shadow rounded text-sm text-white"
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        setPublicId("Empty");
-                                                        setImageselected("");
-                                                    }}>Delete</button>
-                                            </div>
-
-                                        </div>
                                         <div className="flex items-center space-x-9 mt-2">
-                                            <input onChange={(e) => setFisrtName(e.target.value)} placeholder="First Name" type="text" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input onChange={(e) => setLastName(e.target.value)} placeholder="Last Name" type="text" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <select onChange={(e) => setGender(e.target.value)} name="Gender" id="Gender" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
-                                                <option defaultChecked className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Gender</option>
-                                                <option value="Male" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Male</option>
-                                                <option value="Female" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Female</option>
-                                            </select>
-                                        </div>
-                                        <div className="flex text-center items-center space-x-9 mt-8">
-                                            <input onChange={(e) => setBirthday(e.target.value)} placeholder="Birthday" type="date" className="w-1/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <select onChange={(e) => setCountryCode(e.target.value)} className="w-1/4 focus:outline-none placeholder-gray-500 text-center py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
-                                                <option defaultChecked className="text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-center text-gray-800 bg-white border rounded border-gray-200">Country Code</option>
-                                                {CountryList.map((specialite) => (
-                                                    <option value={specialite.dial_code} className="w-2/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{specialite.name} / {specialite.dial_code}</option>
-                                                ))}
-                                            </select>
-                                            <input onChange={(e) => setPhone(e.target.value)} placeholder="Phone" type="number" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input onChange={(e) => setdateDevis(e.target.value)} placeholder="First Name" type="date" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input onChange={(e) => setdescriptionDevis(e.target.value)} placeholder="Last Name" type="text" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                         </div>
                                         <div className="flex items-center space-x-9 mt-8">
-                                            <input onChange={(e) => setEmail(e.target.value)} placeholder="Email" type="email" className="w-2/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input onChange={(e) => setCIN(Number(e.target.value))} placeholder="CIN" type="number" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                        </div>
-                                        <div className="flex items-center space-x-9 mt-5">
-                                            <input onChange={(e) => setAdress(e.target.value)} placeholder="Adress" type="text" className="w-2/3 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input onChange={(e) => setPostalCode(Number(e.target.value))} placeholder="Postal Code" type="number" className="w-1/3 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                        </div>
-                                        <div className="flex items-center space-x-9 mt-5">
-                                            <input onChange={(e) => setCity(e.target.value)} placeholder="City" type="text" className="w-1/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <select onChange={(e) => setCountry(e.target.value)} className="w-1/2 focus:outline-none text-center placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
-                                                <option defaultChecked className="focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Country</option>
-                                                {CountryList.map((specialite) => (
-                                                    <option value={specialite.name} className="w-2/4 focus:outline-none text-center placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{specialite.name}</option>
-                                                ))}
-                                            </select>
-                                            <select onChange={(e) => setdepartmentId(e.target.value)} className="w-3/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
-                                                <option defaultChecked className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose department</option>
-                                                {
-                                                    departmentsListData.map((item) => (
-                                                        <option value={item.departmentId} className="w-1/2 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.departmentName}</option>
-                                                    ))
-                                                }
-                                            </select>
-                                        </div>
-                                        <div className="flex items-center space-x-9 mt-5">
-                                            <select onChange={(e) => setSpecialty(e.target.value)} name="specialite" id="specialite" className="w-3/4 focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
-                                                <option defaultChecked className="w-1/2 focus:outline-none text-center placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose specialite</option>
-                                                {specialityList.map((specialite) => (
-                                                    <option value={specialite} className="w-1/2 focus:outline-none text-center placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{specialite}</option>
-                                                ))}
-                                            </select>
-                                            <div className="w-1/4">
-                                                <p>Head of department</p>
-                                                <input onChange={() => setHeadofDepartment(!headofDepartment)} type="checkbox" className="focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            </div>
+                                            <input onChange={(e) => setclientDevis(e.target.value)} placeholder="clientDevis" type="text" className="w-2/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input onChange={(e) => setcoutDevis(Number(e.target.value))} placeholder="coutDevis" type="number" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                         </div>
                                     </form>
                                     <div className="flex items-center justify-between mt-4">
@@ -469,91 +288,14 @@ export default function Dossier() {
                                     </button>
                                 </div>
                                 <div className="px-4 md:px-10 pt-6 md:pt-12 md:pb-4 pb-7">
-                                    <form className="mt-2">
-                                        <div className="flex-row items-center justify-center mb-4">
-                                            <div className="flex justify-center items-center">
-                                                {PublicId != "Empty" ?
-                                                    <div className="max-h-auto max-w-[120px] mb-2"><ImageBalise image={PublicId} /></div>
-                                                    :
-                                                    <img src="src/assets/upload.svg" alt="upload" className="h-[100px] w-[100px]" />
-                                                }
-                                            </div>
-                                            <div className="flex justify-center items-center">
-                                                <input
-                                                    type="file"
-                                                    placeholder="Upload Your Screen Shot"
-                                                    onChange={(event) => {
-                                                        setImageselected(event.target.files[0])
-                                                    }} />
-                                                <button
-                                                    className="px-6 py-3 bg-blue-500 hover:bg-opacity-80 shadow rounded text-sm text-white"
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        PostImage();
-                                                    }}>Upload</button>
-                                                <button
-                                                    className="px-6 py-3 ml-2 bg-red-500 hover:bg-opacity-80 shadow rounded text-sm text-white"
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        setPublicId("Empty");
-                                                        setImageselected("");
-                                                    }}>Delete</button>
-                                            </div>
-                                        </div>
-                                        <div className="flex items-center space-x-9">
-                                            <input defaultValue={fisrtName} onChange={(e) => setFisrtName(e.target.value)} placeholder="First Name" type="text" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input defaultValue={lastName} onChange={(e) => setLastName(e.target.value)} placeholder="Last Name" type="text" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <select defaultValue={gender} onChange={(e) => setGender(e.target.value)} name="Gender" id="Gender" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
-                                                <option defaultChecked className="w-1/2 focus:outline-none text-center placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Gender</option>
-                                                <option value="Male" className="w-1/2 focus:outline-none text-center placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Male</option>
-                                                <option value="Female" className="w-1/2 focus:outline-none text-center placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Female</option>
-                                            </select>
+                                    <form>
+                                        <div className="flex items-center space-x-9 mt-2">
+                                            <input defaultValue={dateDevis} onChange={(e) => setdateDevis(e.target.value)} placeholder="First Name" type="date" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input defaultValue={descriptionDevis} onChange={(e) => setdescriptionDevis(e.target.value)} placeholder="Last Name" type="text" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                         </div>
                                         <div className="flex items-center space-x-9 mt-8">
-                                            <input defaultValue={birthday} onChange={(e) => setBirthday(e.target.value)} placeholder="Birthday" type="date" className="w-1/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <select onChange={(e) => setCountryCode(e.target.value)} className="w-1/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
-                                                <option defaultChecked className="focus:outline-none text-center placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Country Code</option>
-                                                {CountryList.map((specialite) => (
-                                                    <option value={specialite.dial_code} className="w-2/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{specialite.name} / {specialite.dial_code}</option>
-                                                ))}
-                                            </select>
-                                            <input defaultValue={phone.slice(4)} onChange={(e) => setPhone(e.target.value)} placeholder="Phone" type="text" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                        </div>
-                                        <div className="flex items-center space-x-9 mt-8">
-                                            <input defaultValue={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" type="email" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input defaultValue={cin} onChange={(e) => setCIN(Number(e.target.value))} placeholder="CIN" type="number" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                        </div>
-                                        <div className="flex items-center space-x-9 mt-8">
-                                            <input defaultValue={adress} onChange={(e) => setAdress(e.target.value)} placeholder="Adress" type="text" className="w-2/3 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <input defaultValue={postalCode} onChange={(e) => setPostalCode(Number(e.target.value))} placeholder="Postal Code" type="number" className="w-1/3 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                        </div>
-                                        <div className="flex items-center space-x-9 mt-8">
-                                            <input defaultValue={city} onChange={(e) => setCity(e.target.value)} placeholder="City" type="text" className="w-1/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            <select defaultValue={country} onChange={(e) => setCountry(e.target.value)} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
-                                                <option defaultChecked className="focus:outline-none text-center placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Country</option>
-                                                {CountryList.map((specialite) => (
-                                                    <option value={specialite.name} className="w-2/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{specialite.name}</option>
-                                                ))}
-                                            </select>
-                                            <select defaultValue={departmentId} onChange={(e) => setdepartmentId(e.target.value)} className="w-3/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
-                                                {
-                                                    departmentsListData.map((item) => (
-                                                        <option value={item.departmentId} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{item.departmentName}</option>
-                                                    ))
-                                                }
-                                            </select>
-                                        </div>
-                                        <div className="flex items-center space-x-9 mt-8">
-                                            <select defaultValue={specialty} onChange={(e) => setSpecialty(e.target.value)} name="specialite" id="specialite" className="w-3/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">
-                                                <option defaultChecked className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">Choose specialite</option>
-                                                {specialityList.map((specialite) => (
-                                                    <option value={specialite} className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200">{specialite}</option>
-                                                ))}
-                                            </select>
-                                            <div className="w-1/4">
-                                                <p>Head of department</p>
-                                                <input defaultChecked={headofDepartment} onChange={() => setHeadofDepartment(!headofDepartment)} type="checkbox" className="focus:outline-none text-center placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
-                                            </div>
+                                            <input defaultValue={coutDevis} onChange={(e) => setclientDevis(e.target.value)} placeholder="clientDevis" type="text" className="w-2/4 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
+                                            <input defaultValue={clientDevis} onChange={(e) => setcoutDevis(Number(e.target.value))} placeholder="coutDevis" type="number" className="w-1/2 text-center focus:outline-none placeholder-gray-500 py-3 px-3 text-sm leading-none text-gray-800 bg-white border rounded border-gray-200" />
                                         </div>
                                     </form>
                                     <div className="flex items-center justify-between mt-9">
