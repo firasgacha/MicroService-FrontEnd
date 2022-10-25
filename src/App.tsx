@@ -20,8 +20,8 @@ function App() {
         <Route element={<Home />}>
           <Route path="profile" element={<Profile />} />
           <Route path="medical-folder" element={<MedicalFolder />} />
-          <Route path="doctors" element={<ListOfDoctors />} />
-          <Route path="radios" element={< ListOfRadios/>} />
+          <Route path="constat" element={<ListOfDoctors />} />
+          <Route path="radios" element={<ListOfRadios />} />
           <Route path="contacts" element={<ListOfContacts />} />
         </Route>
         <Route path="/login" element={<Login />} />

@@ -14,41 +14,34 @@ export default function ListOfDoctors() {
 
     const COLUMNS = [
         {
-            Header: '',
-            accessor: 'imageUrl',
-            Cell: ({ value }) => (value != "Empty" ? <div className="h-[70px] w-[70px]"><ImageBalise image={value} /></div> : <img src="src/assets/upload.svg" alt="upload" className="h-[50px] w-[50px]" />
-            ),
-            Filter: ColumnFilter
-        },
-        {
             Header: 'constatId',
             accessor: 'constatId',
             Filter: ColumnFilter
         },
         {
             Header: 'Nom',
-            accessor: 'Nom',
+            accessor: 'nom',
             Filter: ColumnFilter
         },
         {
             Header: 'Prenom',
-            accessor: 'Prenom',
+            accessor: 'prenom',
             Filter: ColumnFilter
         },
         {
             Header: 'Adresse',
-            accessor: 'Adresse',
+            accessor: 'adresse',
             Filter: ColumnFilter
         },
         {
             Header: 'Marque',
-            accessor: 'Marque',
+            accessor: 'marque',
             Filter: ColumnFilter,
             // Cell: ({ cell: { value } }) => format(new Date(value), 'dd/MM/yyyy')
         },
         {
             Header: 'Immat',
-            accessor: 'Immat',
+            accessor: 'immat',
             Filter: ColumnFilter
         }
     ]
@@ -120,7 +113,7 @@ export default function ListOfDoctors() {
     }
 
     const fetchDoctorData = async () => {
-        await axios.get('localhost:8079/con/constat')
+        await axios.get('con/constat')
             .then((res) => {
                 setDoctorsListData(res.data);
                 console.log(res.data);
@@ -207,7 +200,7 @@ export default function ListOfDoctors() {
 
     const deleteDoctor = async () => {
         selectedFlatRows.map(async (row) => {
-            await axios.delete(`Doctor/${row.original.id}`)
+            await axios.delete(`con/constat/${row.constatId}`)
                 .then((res) => {
                     fetchDoctorData();
                 }).catch((err) => {
@@ -282,22 +275,12 @@ export default function ListOfDoctors() {
     const EditFunction = () => {
         if (selectedFlatRows.length === 1) {
             selectedFlatRows.map(async (row) => {
-                setDoctorId(row.original.id);
-                setFisrtName(row.original.fisrtName);
-                setLastName(row.original.lastName);
-                setBirthday(row.original.birthday);
-                setCIN(row.original.cin);
-                setAdress(row.original.address);
-                setCity(row.original.city);
-                setCountry(row.original.country);
-                setPostalCode(row.original.postalCode);
-                setEmail(row.original.email);
-                setSpecialty(row.original.specialty);
-                setPhone(row.original.phone);
-                setHeadofDepartment(row.original.headofDepartment);
-                setdepartmentId(row.original.departmentFk);
-                setPublicId(row.original.imageUrl);
-                setPwd(row.original.password);
+                setDoctorId(row.original.constatId);
+                setFisrtName(row.original.nom);
+                setLastName(row.original.prenom);
+                setBirthday(row.original.address);
+                setCity(row.original.marque);
+                setCountry(row.original.immat);
             })
             setshowEditDosctor(!showEditDosctor);
         }
