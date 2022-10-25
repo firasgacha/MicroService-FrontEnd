@@ -90,7 +90,7 @@ export default function Dossier() {
 
 
     const fetchDoctorData = async () => {
-        await axios.get('localhost:8079/con/constat')
+        await axios.get('devis/devis')
             .then((res) => {
                 setDoctorsListData(res.data);
                 console.log(res.data);
@@ -163,7 +163,7 @@ export default function Dossier() {
 
     const deleteDoctor = async () => {
         selectedFlatRows.map(async (row) => {
-            await axios.delete(`localhost:8079/devis/devis/${row.original.devisId}`)
+            await axios.delete(`devis/devis/${row.original.devisId}`)
                 .then((res) => {
                     fetchDoctorData();
                 }).catch((err) => {
@@ -173,7 +173,7 @@ export default function Dossier() {
         alert("Doctor(s) deleted");
     }
     const addDoctor = async () => {
-        await axios.post('localhost:8079/devis/devis/',
+        await axios.post('devis/devis/',
             {
                 "dateDevis": dateDevis,
                 "descriptionDevis": descriptionDevis,
@@ -190,7 +190,7 @@ export default function Dossier() {
     }
 
     const editDoctor = async () => {
-        await axios.put(`localhost:8079/devis/devis/${devisId}`,
+        await axios.put(`devis/devis/${devisId}`,
             {
                 "devisId": devisId,
                 "dateDevis": dateDevis,

@@ -22,10 +22,7 @@ function App() {
           <Route path="profile" element={<Profile />} />
           <Route path="devis" element={<Devis />} />
           <Route path="constat" element={<ListOfDoctors />} />
-          <Route path="radios" element={<ListOfRadios />} />
-          <Route path="medical-folder" element={<MedicalFolder />} />
           <Route path="doctors" element={<ListOfDoctors />} />
-          <Route path="radios" element={<ListOfRadios />} />
           <Route path="contacts" element={<ListOfContacts />} />
         </Route>
         <Route path="/login" element={<Login />} />
