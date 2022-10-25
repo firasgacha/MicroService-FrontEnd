@@ -6,11 +6,12 @@ import NotFound from "pages/NotFound";
 import Profile from "pages/home/profile";
 import Signup from "pages/Singup";
 import About from "pages/About";
-import MedicalFolder from "pages/home/MedicalFolder";
+import Collisions from "pages/home/Collisions";
 import ListOfDoctors from "pages/home/ListOfDoctors";
 import LandingPage from "pages/LandingPage";
 import Contact from "pages/Contact";
-import ListOfRadios from "pages/home/ListOfRadios";
+import Dossier from "pages/home/Dossier";
+import Devis from "pages/home/Devis";
 import ListOfContacts from "pages/home/ListOfContacts";
 
 function App() {
@@ -19,9 +20,10 @@ function App() {
       <Routes>
         <Route element={<Home />}>
           <Route path="profile" element={<Profile />} />
-          <Route path="medical-folder" element={<MedicalFolder />} />
+          <Route path="Devis" element={<Devis />} />
+          <Route path="Dossier" element={<Dossier />} />
+          <Route path="Collisions" element={<Collisions />} />
           <Route path="doctors" element={<ListOfDoctors />} />
-          <Route path="radios" element={< ListOfRadios/>} />
           <Route path="contacts" element={<ListOfContacts />} />
         </Route>
         <Route path="/login" element={<Login />} />
