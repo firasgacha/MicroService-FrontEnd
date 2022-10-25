@@ -21,84 +21,34 @@ export default function ListOfDoctors() {
             Filter: ColumnFilter
         },
         {
-            Header: 'First Name',
-            accessor: 'fisrtName',
+            Header: 'constatId',
+            accessor: 'constatId',
             Filter: ColumnFilter
         },
         {
-            Header: 'Last Name',
-            accessor: 'lastName',
+            Header: 'Nom',
+            accessor: 'Nom',
             Filter: ColumnFilter
         },
         {
-            Header: 'Gender',
-            accessor: 'gender',
-            Filter: ColumnFilter,
-            Cell: ({ value }) => (value == 'Male' ?
-                <div className="ml-6"><MaleSvg /></div> : <div className="ml-6"><FemaleSvg /></div>)
-        },
-        {
-            Header: 'Specialty',
-            accessor: 'specialty',
+            Header: 'Prenom',
+            accessor: 'Prenom',
             Filter: ColumnFilter
         },
         {
-            Header: 'Department',
-            accessor: 'departmentFk',
-            Filter: ColumnFilter,
-            Cell: ({ value }) => (value ?
-                <button onClick={() => {
-                    getDepartementById(value);
-                    setshowDepartment(!showDepartment);
-                }} className="ml-3 rounded-full bg-green-400 text-white text-sm px-6 py-2 flex justify-center items-center">See</button>
-                : 'Not affected')
-        },
-        {
-            Header: 'Head of department',
-            accessor: 'headofDepartment',
-            Cell: ({ cell: { value } }) => (value ? 'Yes' : 'No'),
+            Header: 'Adresse',
+            accessor: 'Adresse',
             Filter: ColumnFilter
         },
         {
-            Header: 'CIN',
-            accessor: 'cin',
-            Filter: ColumnFilter
-        },
-        {
-            Header: 'Birthday',
-            accessor: 'birthday',
+            Header: 'Marque',
+            accessor: 'Marque',
             Filter: ColumnFilter,
             // Cell: ({ cell: { value } }) => format(new Date(value), 'dd/MM/yyyy')
         },
         {
-            Header: 'Email',
-            accessor: 'email',
-            Filter: ColumnFilter
-        },
-        {
-            Header: 'Phone',
-            accessor: 'phone',
-            Filter: ColumnFilter
-        },
-        {
-            Header: 'Adress',
-            accessor: 'address',
-            Filter: ColumnFilter
-        },
-        {
-            Header: 'Postal_Code',
-            accessor: 'postalCode',
-            Filter: ColumnFilter
-        },
-
-        {
-            Header: 'City',
-            accessor: 'city',
-            Filter: ColumnFilter
-        },
-        {
-            Header: 'Country',
-            accessor: 'country',
+            Header: 'Immat',
+            accessor: 'Immat',
             Filter: ColumnFilter
         }
     ]
@@ -170,7 +120,7 @@ export default function ListOfDoctors() {
     }
 
     const fetchDoctorData = async () => {
-        await axios.get('Doctor')
+        await axios.get('localhost:8079/con/constat')
             .then((res) => {
                 setDoctorsListData(res.data);
                 console.log(res.data);
