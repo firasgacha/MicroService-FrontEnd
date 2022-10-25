@@ -30,6 +30,6 @@
     "baseUrl": "src"
     // **************
   },
-  "include": ["src"],
+  "include": ["src", "src/pages/home/Dossier.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
